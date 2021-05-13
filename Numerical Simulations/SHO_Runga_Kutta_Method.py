@@ -53,6 +53,7 @@ A_inv = inv(A)
 B = np.array([[c, k], [-1.0, 0.0]])  # B Matrix
 Y = []  # Array to store values for y after each time-step
 force = []  # Array to store values for force after each time step
+Lagrangian = []  # Array to store values for the lagrangian at each time step
 
 
 # time-stepping solution
@@ -63,9 +64,12 @@ for t in time:
 
     KE = 0.5*m*y[0]**2
     PE = 0.5*k*y[1]**2
+    L = KE - PE
 
     if t % 1 <= 0.01:
         print('Energy:', KE + PE)
+        Lagrangian.append(L)
+
 
 # plot the results
 plt.plot(time, Y)
@@ -73,6 +77,11 @@ plt.plot(time, force)
 plt.title('Forced/Damped Harmonic Oscillator (Displacement/Force vs Time')
 plt.grid(True)
 plt.legend(['Displacement', 'Force'], loc='lower right')
+action = 0
+for i in Lagrangian:
+    print('Lagrangian: ', i)
+    action = action + i
+print('Action: ', action)
 print('Critical Damping: ', np.sqrt((-c**2.0 + 4.0*m*k) / (2.0*m)))
 print('Natural Frequency: ', np.sqrt(k/m))
 plt.show()
